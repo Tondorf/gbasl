@@ -1,0 +1,9 @@
+# don't need to commit the examples
+basic/
+ext/
+adv/
+lab/
+
+# don't need to commit vc*
+vc6/
+vc8/
