@@ -1,35 +1,20 @@
-// Hello World Template:
-
-#include <gba_console.h>
-#include <gba_video.h>
-#include <gba_interrupt.h>
-#include <gba_systemcalls.h>
-#include <gba_input.h>
 #include <stdio.h>
-#include <stdlib.h>
 
-//---------------------------------------------------------------------------------
-// Program entry point
-//---------------------------------------------------------------------------------
-int main(void) {
-//---------------------------------------------------------------------------------
+#include "tonc.h"
 
+int main() {
+    REG_DISPCNT= DCNT_MODE0 | DCNT_BG0;
 
-	// the vblank interrupt must be enabled for VBlankIntrWait() to work
-	// since the default dispatcher handles the bios flags no vblank handler
-	// is required
-	irqInit();
-	irqEnable(IRQ_VBLANK);
+    // Init BG 0 for text on screen entries.
+    tte_init_se_default(0, BG_CBB(0)|BG_SBB(31));
 
-	consoleDemoInit();
+    // Enable TTE's console functionality
+    tte_init_con();
 
-	// ansi escape sequence to set print co-ordinates
-	// /x1b[line;columnH
-	iprintf("\x1b[10;10HHello World!\n");
+    tte_printf("#{P:72,64}");        // Goto (72, 64).
+    tte_printf("Hello World!");      // Print "Hello world!"
 
-	while (1) {
-		VBlankIntrWait();
-	}
+    while(1);
+
+    return 0;
 }
-
-

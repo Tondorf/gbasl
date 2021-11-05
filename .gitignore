@@ -1,6 +1,9 @@
 # GBA
 *.elf
 *.sav
+.vscode
+*.zip
+build/
 
 # Prerequisites
 *.d
