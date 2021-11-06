@@ -1,15 +1,14 @@
-#include "train.h"
-
 #include "tonc.h"
 
-#define LINES 20
-#define COLS 30
+#include "train.h"
+#include "screen.h"
+
 #define ERR 1
 #define OK 0
 
 // int mvaddch(int y, int x, const chtype ch);
 int mvaddch(int y, int x, char* ch) {
-    se_puts(x*8, y*8, ch, 0x1000);
+    se_puts(x*8, y*8, ch, 0x4000);
     return 0;
 }
 
@@ -68,7 +67,7 @@ void add_smoke(int y, int x) {
 }
 
 int add_sl(int x) {
-    static char *sl[LOGOPATTERNS][LOGOHEIGHT + 1] =
+    static char *sl[LOGOANIMSTEPS][LOGOHEIGHT + 1] =
           {{LOGO1, LOGO2, LOGO3, LOGO4, LWHL11, LWHL12, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL21, LWHL22, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL31, LWHL32, DELLN},
@@ -76,22 +75,23 @@ int add_sl(int x) {
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL51, LWHL52, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL61, LWHL62, DELLN}};
 
-    static char *coal[LOGOHEIGHT + 1] = {LCOAL1, LCOAL2, LCOAL3, LCOAL4, LCOAL5, LCOAL6, DELLN};
+    // static char *coal[LOGOHEIGHT + 1] = {LCOAL1, LCOAL2, LCOAL3, LCOAL4, LCOAL5, LCOAL6, DELLN};
 
-    static char *car[LOGOHEIGHT + 1] = {LCAR1, LCAR2, LCAR3, LCAR4, LCAR5, LCAR6, DELLN};
+    // static char *car[LOGOHEIGHT + 1] = {LCAR1, LCAR2, LCAR3, LCAR4, LCAR5, LCAR6, DELLN};
 
-    int i, y, py1=0, py2=0, py3=0;
+    int i, y; //, py1=0, py2=0, py3=0;
 
-    if (x < - LOGOLENGTH)
+    if (x < -LOGOLENGTH)
         return ERR;
-    y = LINES / 2 - 3;
+    y = LINES / 2 - 3; // draw slightly (3 lines) below the vertical middle
 
     for (i = 0; i <= LOGOHEIGHT; ++i) {
-        my_mvaddstr(y + i, x, sl[(LOGOLENGTH + x) / 3 % LOGOPATTERNS][i]);
-        my_mvaddstr(y + i + py1, x + 21, coal[i]);
-        my_mvaddstr(y + i + py2, x + 42, car[i]);
-        my_mvaddstr(y + i + py3, x + 63, car[i]);
+        my_mvaddstr(y + i, x, sl[(LOGOLENGTH + x) / 3 % LOGOANIMSTEPS][i]);
+        // my_mvaddstr(y + i + py1, x + 21, coal[i]);
+        // my_mvaddstr(y + i + py2, x + 42, car[i]);
+        // my_mvaddstr(y + i + py3, x + 63, car[i]);
     }
-    add_smoke(y - 1, x + LOGOFUNNEL);
+    // TODO: Later...
+    //add_smoke(y - 1, x + LOGOFUNNEL);
     return OK;
 }

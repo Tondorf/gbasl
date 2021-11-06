@@ -1,7 +1,10 @@
+#pragma once
+
 #define LOGOHEIGHT    	 6
 #define LOGOFUNNEL  	 4
-#define LOGOLENGTH      84
-#define LOGOPATTERNS	 6
+#define LOGOLENGTH      21 // just the tip
+#define LOGOLENGTHFULL  84 // when showing locomotive+coal+car+car
+#define LOGOANIMSTEPS	 6
 
 #define LOGO1  "     ++      +------ "
 #define LOGO2  "     ||      |+-+ |  "
