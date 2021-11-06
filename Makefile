@@ -35,13 +35,13 @@ export PROJ	?= $(notdir $(CURDIR))
 TITLE		:= $(PROJ)
 GFXLIBS		:= libgfx.a
 
-LIBS		:= -ltonc -lgfx
+LIBS		:= -ltonc -lgfx -lgba
 
 BUILD		:= build
 SRCDIRS		:= src
 DATADIRS	:= data
 INCDIRS		:= include
-LIBDIRS		:= $(TONCCODE)/tonclib
+LIBDIRS		:= $(TONCCODE)/tonclib $(DEVKITPRO)/libgba
 
 # --- switches ---
 

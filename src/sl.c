@@ -1,19 +1,27 @@
 #include "train.h"
 
+#include "tonc.h"
+
 #define LINES 20
 #define COLS 30
 #define ERR 1
 #define OK 0
 
 // int mvaddch(int y, int x, const chtype ch);
+int mvaddch(int y, int x, char* ch) {
+    se_puts(x*8, y*8, ch, 0x1000);
+    return 0;
+}
 
 // mainly copied logic from original sl 5.03
 
 int my_mvaddstr(int y, int x, char *str) {
     for ( ; x < 0; ++x, ++str)
-        if (*str == '\0')  return ERR;
+        if (*str == '\0')
+            return ERR;
     for ( ; *str != '\0'; ++str, ++x)
-        if (mvaddch(y, x, *str) == ERR)  return ERR;
+        if (mvaddch(y, x, str) == ERR)
+            return ERR;
     return OK;
 }
 
@@ -59,42 +67,31 @@ void add_smoke(int y, int x) {
     }
 }
 
-int add_sl(int x)
-{
-    static char *sl[LOGOPATTERNS][LOGOHEIGHT + 1]
-        = {{LOGO1, LOGO2, LOGO3, LOGO4, LWHL11, LWHL12, DELLN},
+int add_sl(int x) {
+    static char *sl[LOGOPATTERNS][LOGOHEIGHT + 1] =
+          {{LOGO1, LOGO2, LOGO3, LOGO4, LWHL11, LWHL12, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL21, LWHL22, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL31, LWHL32, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL41, LWHL42, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL51, LWHL52, DELLN},
            {LOGO1, LOGO2, LOGO3, LOGO4, LWHL61, LWHL62, DELLN}};
 
-    static char *coal[LOGOHEIGHT + 1]
-        = {LCOAL1, LCOAL2, LCOAL3, LCOAL4, LCOAL5, LCOAL6, DELLN};
+    static char *coal[LOGOHEIGHT + 1] = {LCOAL1, LCOAL2, LCOAL3, LCOAL4, LCOAL5, LCOAL6, DELLN};
 
-    static char *car[LOGOHEIGHT + 1]
-        = {LCAR1, LCAR2, LCAR3, LCAR4, LCAR5, LCAR6, DELLN};
+    static char *car[LOGOHEIGHT + 1] = {LCAR1, LCAR2, LCAR3, LCAR4, LCAR5, LCAR6, DELLN};
 
-    int i, y, py1 = 0, py2 = 0, py3 = 0;
+    int i, y, py1=0, py2=0, py3=0;
 
-    if (x < - LOGOLENGTH)  return ERR;
+    if (x < - LOGOLENGTH)
+        return ERR;
     y = LINES / 2 - 3;
 
-    // if (FLY == 1) {
-    //     y = (x / 6) + LINES - (COLS / 6) - LOGOHEIGHT;
-    //     py1 = 2;  py2 = 4;  py3 = 6;
-    // }
     for (i = 0; i <= LOGOHEIGHT; ++i) {
         my_mvaddstr(y + i, x, sl[(LOGOLENGTH + x) / 3 % LOGOPATTERNS][i]);
         my_mvaddstr(y + i + py1, x + 21, coal[i]);
         my_mvaddstr(y + i + py2, x + 42, car[i]);
         my_mvaddstr(y + i + py3, x + 63, car[i]);
     }
-    // if (ACCIDENT == 1) {
-    //     add_man(y + 1, x + 14);
-    //     add_man(y + 1 + py2, x + 45);  add_man(y + 1 + py2, x + 53);
-    //     add_man(y + 1 + py3, x + 66);  add_man(y + 1 + py3, x + 74);
-    // }
     add_smoke(y - 1, x + LOGOFUNNEL);
     return OK;
 }
