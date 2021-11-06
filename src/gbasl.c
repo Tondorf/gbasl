@@ -2,6 +2,7 @@
 
 #include "screen.h"
 #include "sl.h"
+#include "train.h"
 
 // === CONSTANTS & STRUCTS ============================================
 
@@ -30,19 +31,23 @@ void init() {
 	pal_bg_mem[0xEF] = pal_bg_mem[0x0F]; // text
 }
 
+const int slowdown = 4;
+
 int main() {
 	init();
 
 	se_puts(8*(COLS/2-2), 16, "gbasl",   0x1000);
-	for (int x=COLS; x>-1; x--) {
-		if (x<1)
-			x=COLS;
-		// se_puts(8, 16, "bank 1:\n  red",   0x1000);
-		// se_puts(8, 40, "bank 2:\n  green", 0x2000);
-		// se_puts(8, 72, "bank 3:\n  blue",  0x3000);
-		// se_puts(8, 100, "white",  0x4000);
-		add_sl(x);
-		VBlankIntrWait();
-	}
+
+	do {
+		for (int x = COLS - 1; x > -LOGOLENGTH; x--) {
+			// se_puts(8, 16, "bank 1:\n  red",   0x1000);
+			// se_puts(8, 40, "bank 2:\n  green", 0x2000);
+			// se_puts(8, 72, "bank 3:\n  blue",  0x3000);
+			// se_puts(8, 100, "white",  0x4000);
+			add_sl(x);
+			for (int w=0; w<slowdown; w++) // wait more
+				VBlankIntrWait();
+		}
+	} while (true);
 	return 0;
 }
